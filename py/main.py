@@ -92,11 +92,11 @@ def resumable_upload(insert_request):
   retry = 0
   while response is None:
     try:
-      print("Uploading file...")
+      print("Se incarca fisierul...")
       status, response = insert_request.next_chunk()
       if response is not None:
         if 'id' in response:
-          print("Video id '%s' was successfully uploaded." % response['id'])
+          print("Videoul a fost incarcat cu succes! ID-ul videoului: '%s'" % response['id'])
         else:
           exit("The upload failed with an unexpected response: %s" % response)
     except HttpError as e:

@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { exec } = require("child_process_async");
+const { exec } = require("child-process-async");
 
 const MAIN_VIDEO_PATH = path.resolve(__dirname, "../videos");
 const LIST_FILE_PATH = path.resolve(__dirname, "../videos/list.txt");
@@ -9,14 +9,20 @@ const executeFileMergeAndUpload = async (
   OUTPUT_FILE_NAME,
   FINAL_OUTPUT_FILE_PATH
 ) => {
+  console.log("Se combina fisierele video...");
+
   const fileMergeScript = await exec(
     `ffmpeg -safe 0 -f concat -i ${LIST_FILE_PATH} -c copy ${OUTPUT_FILE_NAME}`
   );
 
   if (fileMergeScript.error) {
+    console.log("Oops. Am intampinat o erroare!");
     console.error(fileMergeScript.error);
     return;
   }
+
+  console.log("Combinarea fisierelor a reusit!");
+  console.log("Fisierul final se incarca pe YouTube!");
 
   const pythonUploadScript = await exec(
     `py main.py --file="${FINAL_OUTPUT_FILE_PATH}" --title="Summer vacation in California" --description="Had fun surfing in Santa Cruz" --keywords="surfing,Santa Cruz" --category="22" --privacyStatus="private"`,
@@ -26,6 +32,7 @@ const executeFileMergeAndUpload = async (
   );
 
   if (pythonUploadScript.error) {
+    console.log("Oops. Am intampinat o erroare!");
     console.error(pythonUploadScript.error);
     return;
   }
