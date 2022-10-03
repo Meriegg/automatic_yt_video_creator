@@ -4,5 +4,7 @@
 
 /videos
 
+*.mp4
+
 /py/client_secrets.json
 /py/main.py-oauth2.json
