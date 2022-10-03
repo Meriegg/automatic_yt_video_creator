@@ -47,7 +47,6 @@ VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
 
 
 def get_authenticated_service(args):
-
     flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
         scope=YOUTUBE_UPLOAD_SCOPE,
         message=MISSING_CLIENT_SECRETS_MESSAGE)
@@ -62,29 +61,29 @@ def get_authenticated_service(args):
         http=credentials.authorize(httplib2.Http()))
 
 def initialize_upload(youtube, options):
-  tags = None
-  if options.keywords:
-    tags = options.keywords.split(",")
+    tags = None
+    if options.keywords:
+        tags = options.keywords.split(",")
 
-  body=dict(
-    snippet=dict(
-      title=options.title,
-      description=options.description,
-      tags=tags,
-      categoryId=options.category
-    ),
-    status=dict(
-      privacyStatus=options.privacyStatus
+    body=dict(
+        snippet=dict(
+        title=options.title,
+        description=options.description,
+        tags=tags,
+        categoryId=options.category
+        ),
+        status=dict(
+        privacyStatus=options.privacyStatus
+        )
     )
-  )
 
-  insert_request = youtube.videos().insert(
-    part=",".join(body.keys()),
-    body=body,
-    media_body=MediaFileUpload(options.file, chunksize=-1, resumable=True)
-  )
+    insert_request = youtube.videos().insert(
+        part=",".join(body.keys()),
+        body=body,
+        media_body=MediaFileUpload(options.file, chunksize=-1, resumable=True)
+    )
 
-  resumable_upload(insert_request)
+    resumable_upload(insert_request)
 
 def resumable_upload(insert_request):
   response = None
