@@ -19,6 +19,11 @@ busboy@^1.0.0:
   dependencies:
     streamsearch "^1.1.0"
 
+child-process-async@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/child-process-async/-/child-process-async-1.0.1.tgz#ee3f0da64421ce6bcd79119003893c53810c4723"
+  integrity sha512-5azrGe+ED5oBFgspraK+A5Uqg1RQ7vsh7auoxvOWsRF3KxbiPLd9zX/DAq2zD5WV+Z4xyMbWSOHkXWy51EsK9g==
+
 concat-stream@^1.5.2:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.2.tgz#904bdf194cd3122fc675c77fc4ac3d4ff0fd1a34"
