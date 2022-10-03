@@ -3,3 +3,6 @@
 /js/node_modules
 
 /videos
+
+/py/client_secrets.json
+/py/main.py-oauth2.json
