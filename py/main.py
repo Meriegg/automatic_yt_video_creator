@@ -64,11 +64,15 @@ def initialize_upload(youtube, options):
     tags = None
     if options.keywords:
         tags = options.keywords.split(",")
+        
+    editedDescription = options.description
+    if options.description:
+      editedDescription = editedDescription.replace("\\", "\n") 
 
     body=dict(
         snippet=dict(
         title=options.title,
-        description=options.description,
+        description=editedDescription,
         tags=tags,
         categoryId=options.category
         ),
