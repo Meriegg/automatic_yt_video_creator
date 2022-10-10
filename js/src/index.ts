@@ -243,7 +243,7 @@ export const setUploadTimer = () => {
     if (uploads >= MAX_UPLOADS) {
       clearInterval(uploadInterval);
       console.log("Ai ajuns la limita maxima de upload-uri pe zi.");
-      console.log("Ruleaza programul maine!");
+      console.log("Urmatorul process de upload-uri va incepe in aprozimativ 24 de ore.");
     }
 
     main();
