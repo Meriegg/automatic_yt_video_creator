@@ -5,7 +5,6 @@ const { exec } = require("child-process-async");
 
 const MAIN_VIDEO_PATH = path.resolve(__dirname, "../../videos");
 const LIST_FILE_PATH = path.resolve(__dirname, "../../videos/list.txt");
-
 const MAX_UPLOADS = 6;
 
 const executeFileMergeAndUpload = async (
@@ -30,7 +29,7 @@ const executeFileMergeAndUpload = async (
   console.log("Fisierul final se incarca pe YouTube!");
 
   const pythonUploadScript = await exec(
-    `py main.py --file="${FINAL_OUTPUT_FILE_PATH}" --title="${videoTitle}" --category="10" --privacyStatus="private" --description="${description}"`,
+    `py main.py --file="${FINAL_OUTPUT_FILE_PATH}" --title="${videoTitle}" --category="10" --privacyStatus="public" --description="${description}`,
     {
       cwd: "py",
     }
@@ -51,31 +50,17 @@ const generateRandomNumber = (max: number) => {
 
 type CreateVideoTitleAndType = {
   randomArtist: string;
-  typeOfVideo: string;
-  isGeneratingVideoAge: boolean;
-  videoAge: string;
   title: string;
 };
 
-const createVideoTitleAndType = (
-  artists: string[],
-  typesOfVideo: string[],
-  videoAges: string[]
-): CreateVideoTitleAndType => {
+const createVideoTitleAndType = (artists: string[]): CreateVideoTitleAndType => {
   const randomArtist = artists[generateRandomNumber(artists.length - 1)];
-  const typeOfVideo = typesOfVideo[generateRandomNumber(typesOfVideo.length - 1)];
 
-  const isGeneratingVideoAge = !!generateRandomNumber(1);
-  const videoAge = videoAges[generateRandomNumber(videoAges.length - 1)];
-
-  const title = `${typeOfVideo} ${randomArtist} - Colaj Manele ${isGeneratingVideoAge ? videoAge : ""}`;
+  const title = `${randomArtist} - Colaj Manele`;
 
   return {
     randomArtist,
-    typeOfVideo,
     title,
-    videoAge,
-    isGeneratingVideoAge,
   };
 };
 
@@ -97,10 +82,7 @@ const chooseTypeAndArtist = async () => {
     artists.push(splitArtist[splitArtistIdx]);
   }
 
-  const typesOfVideo = ["Best Of", "Top 10", "Manele De Dragoste"];
-  const videoAges = ["vechi", "noi"];
-
-  return createVideoTitleAndType(artists, typesOfVideo, videoAges);
+  return createVideoTitleAndType(artists);
 };
 
 type FilterFilesByTypeAndArtist = {
@@ -112,7 +94,7 @@ const filterFilesByTypeAndArtist = async (
   files: string[],
   typeAndArtist: CreateVideoTitleAndType
 ): Promise<FilterFilesByTypeAndArtist> => {
-  const { randomArtist, typeOfVideo, videoAge, isGeneratingVideoAge } = typeAndArtist;
+  const { randomArtist } = typeAndArtist;
 
   let tempFiles;
 
@@ -126,26 +108,7 @@ const filterFilesByTypeAndArtist = async (
     return randomArtist.replace(/\s+/g, "") === artistName ? file : null;
   });
 
-  // Filter Files By Type
-  tempFiles = tempFiles.filter((file) => {
-    const [_, type] = file.split("_");
-
-    return typeOfVideo.replace(/\s+/g, "") === type ? file : null;
-  });
-
   if (!tempFiles.length) return filterFilesByTypeAndArtist(files, await chooseTypeAndArtist());
-  if (!isGeneratingVideoAge) return { files: tempFiles, generatedData: typeAndArtist };
-
-  // Filter files by video age
-  tempFiles = tempFiles.filter((file) => {
-    const [_, __, currentVideoAge] = file.split("_");
-
-    return currentVideoAge === videoAge ? file : null;
-  });
-
-  if (!tempFiles.length) {
-    return filterFilesByTypeAndArtist(files, await chooseTypeAndArtist());
-  }
 
   return { files: tempFiles, generatedData: typeAndArtist };
 };
@@ -212,7 +175,12 @@ const generateTimeStamps = async (allFileNames: string[]) => {
   return videoTimestamps;
 };
 
-const main = () => {
+export const main = () => {
+  console.log(
+    "--------------------------------------------------------------------------------------------------------------------------------"
+  );
+  console.log("Un proces nou de upload a inceput!");
+
   fs.readdir(MAIN_VIDEO_PATH, async (err: any, files: string[]) => {
     if (err) {
       console.error(err);
@@ -250,9 +218,8 @@ const main = () => {
     writeStream.write(list);
     writeStream.end();
 
-    const description = `Description\\${generatedVideoData.title}\\#${
-      generatedVideoData.randomArtist
-    } #manele #colajnou #colaj #slmnet\\${timeStamps?.map((stamp) => `${stamp}\\`).join("")}`;
+    // prettier-ignore
+    const description = `${generatedVideoData.title}\\${generatedVideoData.randomArtist.split(" ").map((tag) => `#${tag} `).join("")} #manele #colajnou #colaj #slmnet\\${timeStamps?.map((stamp) => `${stamp}\\`).join("")}`;
 
     await executeFileMergeAndUpload(
       OUTPUT_FILE_NAME,
@@ -263,10 +230,13 @@ const main = () => {
   });
 };
 
-(() => {
+export const setUploadTimer = () => {
   let uploads = 0;
 
   const uploadInterval = setInterval(() => {
+    console.log(
+      `Intervalul de uploadare a inceput. Din ora in ora, timp de 5 ore, un videoclip nou va fi creat si pus pe youtube.`
+    );
     uploads += 1;
     console.log(`${MAX_UPLOADS - uploads} Videoclipuri ramase pe ziua de azi`);
 
@@ -278,4 +248,4 @@ const main = () => {
 
     main();
   }, 10000 * 6 * 60);
-})();
+};

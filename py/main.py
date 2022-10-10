@@ -69,6 +69,8 @@ def initialize_upload(youtube, options):
     if options.description:
       editedDescription = editedDescription.replace("\\", "\n") 
 
+    print(editedDescription)
+
     body=dict(
         snippet=dict(
         title=options.title,

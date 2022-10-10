@@ -1,22 +1,3 @@
-# Cum functioneaza programul
-
-Cand dai run, prima data programul va alege un artist random, Ex: Florin Salam, Nicolae Guta, etc. Apoi, va alege un tip de video , Ex: Best Of, Manele De Dragoste, etc. Apoi, va alege daca videoclipul va avea categoria de `noi` sau `vechi`, Ex: Nicolage Guta Best Of Manele _Noi_.
-
-Nu toate videoclipurile vor avea categoria de _Noi_ sau _Vechi_, acest proces este random.
-
-Apoi programul o sa creeze un titlu: `{Tip De videoclip} {Nume artist} - Colaj Manele {Noi / Vechi}`
-
-Exemple:
-`Best Of Florin Salam - Colaj Manele`
-`Manele De Dragoste Nicolae Guta - Colaj Manele Vechi`
-`Best of Tzanca Uraganu - Colaj Manele Noi`
-
-De mentionat este ca _Noi_ sau _Vechi_ nu vor aparea mereu.
-
-Apoi programul va merge in folder-ul `videos` si v-a lua toate videoclipurile care indeplinesc parametri generati si le va combina intr-un singur videoclip.
-
-Programul va genera si o descriere cu taguri si timestamp-uri.
-
 # Inceperea programului
 
 Primul pas este sa dai build la program.
@@ -37,12 +18,7 @@ Daca vrei sa adaugi un videoclip nou pentru a fii folosit trebuie sa urmezi urma
 
 1. Copiaza fisierul .mp4 in folderul `videos`
 2. Numeste videoclipul astfel:
-   `{Nume Artist Fara Spatii}_{Tipul de videoclip}_{Tipul De Vechime}_{un numar random}`
-
-   `Nume Artist Fara Spatii = FlorinSalam, NicolaeGuta, etc.`
-   `Tipul de videoclip = BestOf, ManeleDeDragoste, etc.`
-   `Tipul De Vechime = noi / vechi`
-   `Un Numar random = 1, 2, 3, 4, ..., n`
+   `{Nume Artist Fara Spatii}_{un numar random}.mp4`
 
 3. Pentru a adauga numele melodiei trebuie sa te duci in fisierul `songNames.txt` si sa adaugi videoclipul in acest format:
 
@@ -71,7 +47,7 @@ In fisierul `artists.txt`:
 `Nicolae Guta;`
 
 In folderul `videos`:
-`NicolaeGuta_{Tip}_...`
+`NicolaeGuta_1.mp4`
 
 ### **Atentie**
 
@@ -83,8 +59,8 @@ In fisierul `artists.txt`:
 `Nicolae Guta;`
 
 In folderul `videos`:
-`Nicolaeguta_{Tip}_...`
+`Nicolaeguta_2.mp4`
 
 _Sau_
 
-`Nicolae_guta_{Tip}_...`
+`Nicolae_guta_1.mp4`
